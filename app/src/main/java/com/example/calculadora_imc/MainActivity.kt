@@ -197,8 +197,22 @@ fun PantallaResultado(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        val colorCategoria = when {
+
+            imc < 18.5 -> Color.Red
+
+            imc < 25.0 -> Color.Green
+
+            imc < 30.0 -> Color(0xFFFFA500)
+
+            else -> Color.Red
+        }
+
         Text(
-            text = categoria
+            text = categoria,
+            color = colorCategoria,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(32.dp))
