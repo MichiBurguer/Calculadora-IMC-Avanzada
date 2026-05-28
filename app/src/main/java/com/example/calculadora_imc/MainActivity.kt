@@ -54,6 +54,8 @@ fun PantallaIngreso() {
     var peso by remember { mutableStateOf("") }
     var altura by remember { mutableStateOf("") }
 
+    var error by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +84,10 @@ fun PantallaIngreso() {
         TextField(
             value = peso,
             onValueChange = { peso = it },
-            label = { Text("Peso") }
+            label = { Text("Peso") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            )
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -90,13 +95,44 @@ fun PantallaIngreso() {
         TextField(
             value = altura,
             onValueChange = { altura = it },
-            label = { Text("Altura") }
+            label = { Text("Altura") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            )
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (error) {
+
+            Text(
+                text = "Por favor, ingresa valores válidos",
+                color = Color.Red
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         Button(
-            onClick = { }
+            onClick = {
+
+                val pesoDouble = peso.toDoubleOrNull()
+                val alturaDouble = altura.toDoubleOrNull()
+
+                if (
+                    pesoDouble == null ||
+                    alturaDouble == null ||
+                    pesoDouble <= 0 ||
+                    alturaDouble <= 0
+                ) {
+
+                    error = true
+
+                } else {
+
+                    error = false
+                }
+            }
         ) {
 
             Text("Calcular")
