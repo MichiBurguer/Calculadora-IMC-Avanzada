@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    PantallaIngreso()
+                    AppNavegacion()
 
                 }
             }
@@ -48,7 +48,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PantallaIngreso() {
+fun PantallaIngreso(
+    onNavegarAResultado: (String, Double) -> Unit
+) {
 
     var nombre by remember { mutableStateOf("") }
     var peso by remember { mutableStateOf("") }
@@ -131,11 +133,45 @@ fun PantallaIngreso() {
                 } else {
 
                     error = false
+
+                    val imc =
+                        pesoDouble / (alturaDouble * alturaDouble)
+
+                    onNavegarAResultado(
+                        nombre,
+                        imc
+                    )
                 }
             }
         ) {
 
             Text("Calcular")
+        }
+    }
+}
+
+@Composable
+fun AppNavegacion() {
+
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "ingreso"
+    ) {
+
+        composable("ingreso") {
+
+            PantallaIngreso { nombre, imc ->
+
+                navController.navigate(
+                    "resultado/$nombre/$imc"
+                )
+            }
+        }
+
+        composable("resultado/{nombre}/{imc}") {
+
         }
     }
 }
